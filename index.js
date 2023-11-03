@@ -25,17 +25,18 @@ def calculator(fnction, x_0):
     fnction = simplify(fnction)
     derivative = diff(simplify(fnction), x)
     fnction_limit = limit(fnction, x, x_0)
+    right_fnction_limit = limit(fnction, x, x_0, "+")
+    left_fnction_limit = limit(fnction, x, x_0, "-")
     right_limit = limit(derivative, x, x_0, "+")
     left_limit = limit(derivative, x, x_0, "-")
     fnction_y_0 = fnction.subs(x, x_0)
-    continuos = fnction_y_0 == fnction_limit
-    
+    continuos = fnction_y_0 == right_fnction_limit and fnction_y_0 == left_fnction_limit
     derivative_y_0 = derivative.subs(x, x_0)
-
     return derivative, fnction_limit, right_limit, left_limit, continuos, derivative_y_0, fnction_y_0
 
 # Test the function
 calculator(fnctionInput, dotInput)
+
 
 `;
 
@@ -72,29 +73,29 @@ calculator(fnctionInput, dotInput)
     // limitOutputField.latex(nerdamer.convertToLaTeX(replaceLog(replaceDoubleAsterisks(limit.toString()))));
     leftLimitOutputField.latex(nerdamer.convertToLaTeX(replaceDoubleAsterisks(leftLimit.toString())));
     rightLimitOutputField.latex(nerdamer.convertToLaTeX(replaceDoubleAsterisks(rightLimit.toString())));
-
-    if (continuos) {
+    console.log(continuos.toString())
+    if (continuos == "true") {
 
         if ((!leftLimit.toString().includes('oo') && !rightLimit.toString().includes('oo')) && leftLimit.toString() == rightLimit.toString()) {
-            document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + fnction_y_0.toString() + ") " + "é continua e derivabile";
+            document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + replaceZWithSymbol(fnction_y_0.toString()) + ") " + "é continua e derivabile";
             if (derivative_y_0.toString() == '0') {
                 document.getElementById("kind").textContent = " - punto stazionario";
             }
         } else if (leftLimit.toString().includes('oo') && rightLimit.toString().includes('oo')) {
             if (leftLimit.toString() == rightLimit.toString()) {
-                document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + fnction_y_0.toString() + ") " + "é continua e non derivabile";
+                document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + replaceZWithSymbol(fnction_y_0.toString()) + ") " + "é continua ma non derivabile";
                 document.getElementById("kind").textContent = " - flesso a tangente verticale";
             } else {
-                document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + fnction_y_0.toString() + ") " + "é continua e non derivabile";
+                document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + replaceZWithSymbol(fnction_y_0.toString()) + ") " + "é continua ma non derivabile";
                 document.getElementById("kind").textContent = " - cuspide";
             }
         } else if (leftLimit.toString() !== rightLimit.toString()) {
-            document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + fnction_y_0.toString() + ") " + "é continua e non derivabile";
+            document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + replaceZWithSymbol(fnction_y_0.toString()) + ") " + "é continua ma non derivabile";
             document.getElementById("kind").textContent = " - punto angoloso";
         }
 
     } else {
-        document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + fnction_y_0.toString() + ") " + "é continua e non derivabile";
+        document.getElementById("description").textContent = "la funzione nel punto (" + dotInput.toString() + " ; " + replaceZWithSymbol(fnction_y_0.toString()) + ") " + "non é continua e non derivabile";
     }
     document.getElementById('loadingIndicator').style.display = 'none';
 }
@@ -121,3 +122,6 @@ function removeMathrm(inputString) {
 function replaceLogWithLn(inputString) {
     return inputString.replace(/\blog\b/g, 'ln');
 }
+function replaceZWithSymbol(inputString) {
+    return inputString.replace(/z/g, '±');
+  }
