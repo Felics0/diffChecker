@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- MathQuill CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css" />
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <!-- MathQuill JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.js"></script>
+
+  <!-- Desmos -->
+  <script src="https://www.desmos.com/api/v1.5/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+
+  <!-- Nerdamer -->
+  <script src="nerdamer/nerdamer.core.js"></script>
+  <script src="nerdamer/Algebra.js"></script>
+  <script src="nerdamer/Calculus.js"></script>
+  <script src="nerdamer/Solve.js"></script>
+  <script src="nerdamer/Extra.js"></script>
+
+  <!-- Pyodide -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+</head>
+
+<body>
+  <p>Inserisci la funzione: <span id="functionInput"></span> &emsp; &emsp; &emsp;
+    Inserisci x₀ ∈ al dominio: <span id="dotInput"></span> &emsp; &emsp; &emsp;
+    <button id="enter" onclick="main();">Invio</button>
+  </p>
+  <div id="loadingIndicator" style="display: none;">Calcolo dei risultati in corso...</div>
+  <div id="desmos" style="width: 600px; height: 400px;"></div>
+  <p>Derivata in x: <span id="diffOutput"></span></p>
+  <!-- <p>Limite della funzione in x₀: <span id="limitOutput"></span></p>  -->
+  <p>Limite sinistro della derivata in x₀: <span id="leftLimitOutput"></span></p>
+  <p>Limite destro della derivata in x₀: <span id="rightLimitOutput"></span></p>
+  <p><span id="description"></span><span id="kind"></span></p>
+  <button onclick="location.reload();">Reset</button>
+
+  <script>
+
+
+    var elt = document.getElementById('desmos');
+    var desmos = Desmos.GraphingCalculator(elt, {
+      expressionsCollapsed: true,
+      keypad: false,
+      expressions: false,
+      settingsMenu: true,
+      zoomButtons: false,
+      fullScreen: false,
+      expressionsTopbar: false,
+      pointsOfInterest: true,
+    });
+
+    var MQ = MathQuill.getInterface(2);
+
+    var pointInput = document.getElementById('dotInput');
+    var dotInputField = MQ.MathField(pointInput);
+
+    var functionInput = document.getElementById('functionInput');
+    var functionInputField = MQ.MathField(functionInput);
+
+    vardiffOutput = document.getElementById('diffOutput');
+    var diffOutputField = MQ.StaticMath(diffOutput);
+
+    // var limitOutput = document.getElementById('limitOutput');
+    // var limitOutputField = MQ.StaticMath(limitOutput);
+
+    var leftLimitOutputField = MQ.StaticMath(document.getElementById('leftLimitOutput'));
+    var rightLimitOutputField = MQ.StaticMath(document.getElementById('rightLimitOutput'));
+
+
+  </script>
+
+  <script src="index.js"></script>
+</body>
+
+</html>
