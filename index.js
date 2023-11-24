@@ -22,7 +22,6 @@ from sympy import limit, symbols, diff, simplify, S
 def calculator(fnction, x_0):
     
     x = symbols('x')
-    fnction = simplify(fnction)
     derivative = diff(simplify(fnction), x)
     fnction_limit = limit(fnction, x, x_0)
     right_fnction_limit = limit(fnction, x, x_0, "+")
